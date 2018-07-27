@@ -1,5 +1,5 @@
 import { mapObjIndexed, tryCatch, values } from 'ramda';
-import * as Rx from "rx"
+import Rx from 'rxjs/Rx';
 
 const $ = Rx.Observable;
 
@@ -19,12 +19,6 @@ function isError(obj) {
   return obj instanceof Error
 }
 
-function eventEmitterFactory(_, context, __) {
-  void _, context, __;
-
-  return new Rx.Subject()
-}
-
 /**
  * Driver factory which takes a configuration object and returns a driver.
  * The returned driver will be handling action requests arriving on its input stream (sink) via:
@@ -34,15 +28,15 @@ function eventEmitterFactory(_, context, __) {
  *   + repository : enclose API allowing to use a specific data repository
  *   + context : passed back for reference to the callback function
  * @param repository
- * @param config
+ * @param settings
  */
-export function makeDomainActionDriver(repository, config) {
+export function makeDomainActionDriver(repository, settings) {
+  const { emitterFactory, config } = settings;
   // Create a subject for each context defined in config
-  const eventEmitters = mapObjIndexed(eventEmitterFactory, config);
+  const eventEmitters = mapObjIndexed(emitterFactory, config);
 
   return function (sink$) {
     const source$ = sink$.map(function executeAction(action) {
-      console.info('DOMAIN ACTION | ', action);
       const { context, command, payload } = action;
       const fnToExec = config[context][command];
       const wrappedFn = tryCatch(fnToExec, errorHandler);
@@ -79,14 +73,13 @@ export function makeDomainActionDriver(repository, config) {
       }
     });
 
-    source$.subscribe(function (x) {console.log(`makeDomainActionDriver`, x)});
+    source$.subscribe(function (x) {});
 
     // DOC : responseSource$ will emit responses for any of the action request
     // DOC : for use cases when one wants to filter per context, `getResponse` property is added
     // DOC : returns the subject from which one can listen for responses of a given context
     const responseSource$ = $.merge(values(eventEmitters));
     responseSource$.getResponse = function getResponse(context) {
-      console.warn('getResponse', context);
       return eventEmitters[context]
     };
 

@@ -1,22 +1,19 @@
 import { all, any, complement, curry, isNil, keys, pipe, values } from 'ramda';
+import { getAboutFormData, getQuestionFormData, getTeamDetailFormData } from './fetch';
 import {
-  getAboutFormData, getQuestionFormData, getTeamDetailFormData
-} from './processApplicationFetch';
+  aboutScreenFieldValidationSpecs, questionScreenFieldValidationSpecs, teamDetailScreenFieldValidationSpecs,
+  validateScreenFields
+} from './formValidation';
 import {
-  aboutScreenFieldValidationSpecs, questionScreenFieldValidationSpecs,
-  teamDetailScreenFieldValidationSpecs, validateScreenFields
-} from './processApplicationValidation';
-import {
-  STEP_ABOUT, STEP_REVIEW, USER_APPLICATION_ABOUT_CONTINUE_BUTTON_SELECTOR,
+  STEP_ABOUT, STEP_QUESTION, STEP_REVIEW, STEP_TEAMS, USER_APPLICATION_ABOUT_CONTINUE_BUTTON_SELECTOR,
   USER_APPLICATION_BACK_TO_TEAMS_SELECTOR, USER_APPLICATION_JOIN_UNJOIN_TEAM_SELECTOR,
-  USER_APPLICATION_REVIEW_ABOUT_SELECTOR, USER_APPLICATION_REVIEW_OPP_QUESTION_SELECTOR,
-  USER_APPLICATION_REVIEW_SUBMIT_SELECTOR, USER_APPLICATION_REVIEW_TEAMS_SELECTOR,
-  USER_APPLICATION_SKIP_TEAM_SELECTOR, USER_APPLICATION_TEAM_CONTINUE_BUTTON_SELECTOR,
-  USER_APPLICATION_TEAMLIST_SELECTOR
+  USER_APPLICATION_QUESTION_CONTINUE_BUTTON_SELECTOR, USER_APPLICATION_REVIEW_ABOUT_SELECTOR,
+  USER_APPLICATION_REVIEW_OPP_QUESTION_SELECTOR, USER_APPLICATION_REVIEW_SUBMIT_SELECTOR,
+  USER_APPLICATION_REVIEW_TEAMS_SELECTOR, USER_APPLICATION_SKIP_TEAM_SELECTOR,
+  USER_APPLICATION_TEAM_CONTINUE_BUTTON_SELECTOR, USER_APPLICATION_TEAMLIST_SELECTOR
 } from './properties';
 import { isBoolean } from "@rxcc/contracts"
-import { preventDefault } from "@rxcc/utils"
-import { USER_APPLICATION_QUESTION_CONTINUE_BUTTON_SELECTOR } from "./properties/index"
+import { preventDefault } from "../helpers"
 
 ///////
 // Events
@@ -29,9 +26,8 @@ export function aboutContinueEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_ABOUT_CONTINUE_BUTTON_SELECTOR).events('click')
-    .tap(preventDefault)
-    .map((x) => {``
-      void x;
+    .do(preventDefault)
+    .map((x) => {
       const formData = getAboutFormData(sources.document);
 
       return {
@@ -46,8 +42,7 @@ export function questionContinueEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_QUESTION_CONTINUE_BUTTON_SELECTOR).events('click')
-    .tap(preventDefault)
-    .tap(console.warn.bind(console, 'submit button clicked'))
+    .do(preventDefault)
     .map((x) => {
       void x;
       const formData = getQuestionFormData(sources.document);
@@ -57,7 +52,6 @@ export function questionContinueEventFactory(sources, settings) {
         validationData: validateScreenFields(questionScreenFieldValidationSpecs, formData)
       }
     })
-    .tap(console.warn.bind(console, 'validation Question fields performed'))
 }
 
 // @returns Stream<Number> returns the index of the team which has been clicked or throws
@@ -65,8 +59,7 @@ export function teamClickedEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_TEAMLIST_SELECTOR).events('click')
-    .tap(preventDefault)
-    .tap(console.warn.bind(console, 'team list area clicked'))
+    .do(preventDefault)
     .map((e) => {
       const target = e.target;
       const elIndex = target.getAttribute('data-index');
@@ -79,21 +72,20 @@ export function teamClickedEventFactory(sources, settings) {
     // it can happen that the click is on the div but not on a data-index element => elIndex = null
     // Note that isNil is used and not identity, otherwise elIndex = 0 would be filtered out
     .filter(complement(isNil))
-    .tap(console.warn.bind(console, 'team index'))
 }
 
 export function teamContinueEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_TEAM_CONTINUE_BUTTON_SELECTOR).events('click')
-    .tap(preventDefault)
+    .do(preventDefault)
 }
 
 export function skipTeamClickedEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_SKIP_TEAM_SELECTOR).events('click')
-    .tap(preventDefault)
+    .do(preventDefault)
     .map((x) => ({ formData: getTeamDetailFormData(sources.document) }))
 }
 
@@ -101,7 +93,7 @@ export function joinTeamClickedEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_JOIN_UNJOIN_TEAM_SELECTOR).events('click')
-    .tap(preventDefault)
+    .do(preventDefault)
     .map((x) => {
       void x;
       const formData = getTeamDetailFormData(sources.document);
@@ -117,7 +109,7 @@ export function backTeamClickedEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_BACK_TO_TEAMS_SELECTOR).events('click')
-    .tap(preventDefault)
+    .do(preventDefault)
     .map(ev => getTeamDetailFormData(sources.document))
 }
 
@@ -125,35 +117,34 @@ export function changeAboutEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_REVIEW_ABOUT_SELECTOR).events('click')
-    .tap(preventDefault)
+    .do(preventDefault)
 }
 
 export function changeQuestionEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_REVIEW_OPP_QUESTION_SELECTOR).events('click')
-    .tap(preventDefault)
+    .do(preventDefault)
 }
 
 export function changeTeamsEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_REVIEW_TEAMS_SELECTOR).events('click')
-    .tap(preventDefault)
+    .do(preventDefault)
 }
 
 export function applicationCompletedEventFactory(sources, settings) {
   void settings;
 
   return sources.DOM.select(USER_APPLICATION_REVIEW_SUBMIT_SELECTOR).events('click')
-    .tap(preventDefault)
+    .do(preventDefault)
 }
 
 ///////
 // Event guards
 
 export function hasApplied(model, eventData) {
-  void model;
   const userApplication = eventData.userApplication;
 
   if (userApplication) {
@@ -192,9 +183,12 @@ function _isStepX(targetStep, model, eventData) {
 }
 
 export const isStep = curry(_isStepX);
+export const isStepAbout = isStep(STEP_ABOUT);
+export const isStepQuestion = isStep(STEP_QUESTION);
+export const isStepTeams = isStep(STEP_TEAMS);
+export const isStepReview = isStep(STEP_REVIEW);
 
 export function isFormValid(model, eventData) {
-  void model;
   return pipe(values, all(isBoolean))(eventData.validationData)
 }
 
@@ -210,7 +204,6 @@ export function hasJoinedAtLeastOneTeam(model, eventData) {
   const _hasJoinedAtLeastOneTeam = any((teamKey) => {
     return teams[teamKey].hasBeenJoined
   }, keys(teams));
-  console.log('hasJoinedAtLeastOneTeam', _hasJoinedAtLeastOneTeam);
 
   return _hasJoinedAtLeastOneTeam;
 }
