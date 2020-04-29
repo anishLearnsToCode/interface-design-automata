@@ -23,6 +23,22 @@ trade-off associated to using state machines for specifying and implementing use
 
 The implementation uses `cyclejs` as framework, and [`state-transducer`](https://github.com/brucou/state-transducer#example-run) as a state machine library.
 
+#Running it Locally
+
+ 1. Check out the branch on your machine using command line or terminal and navigate into
+ the correct directory using
+ ```shell script
+git clone https://github.com/anishLearnsToCode/interface-design-automata.git
+cd interface-design-automata
+ ```  
+
+Then to run the application
+```shell script
+npm run start
+``` 
+
+Open your web browser (preferably Chrome or Mozila) at [port 8000](localhost:8000)
+
 # General specifications
 Here are the initial specifications for the volunteer application workflow, as extracted from the
  UX designers. Those initial specifications are light in details, and are simple lo-fi wireframes.
@@ -94,7 +110,7 @@ the model).
 __1__: Those paths can be split into control paths and data paths (the latter relating to the set of 
 values the extended state can take
 
-Miscellaneous model coverage criteria <sup>2</sup> are commonly used when designing a test suite with the 
+Miscellaneous model coverage criteria<sup>2</sup> are commonly used when designing a test suite with the 
 help of a model:
 
 - **All states coverage** is achieved when the test reaches every state in the model
@@ -117,7 +133,7 @@ loops in the model
 
 ![testing criteria](public/assets/images/structural%20fsm%20test%20-%20Imgur.png)
 
-[^2]: Bin99 Binder, R. V., Testing object-oriented systems: models, patterns, and
+__2__: Bin99 Binder, R. V., Testing object-oriented systems: models, patterns, and
     tools. Addison-Wesley Longman Publishing Co., Inc., Boston, MA,
     USA, 1999.
 
@@ -217,10 +233,3 @@ We then wire that stream of actions with cyclejs sinks. In this iteration, we ma
  drivers : the DOM driver for updating the screen, and a domain driver for fetching data. 
  
 Code available in [dedicated branch](https://github.com/brucou/cycle-state-machine-demo/tree/first-iteration).
- 
- ## Run
-Check-out the branch on your local computer then type `npm run start` in the root directory for 
-that branch.
-
-# Second iteration
-**coming soon**
