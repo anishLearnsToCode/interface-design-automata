@@ -91,7 +91,7 @@ reified into executable concrete test suites, and actual outputs (from the model
 are compared manually to expected outputs (derived from the informal requirements which originated 
 the model).
 
-<sup>1</sup>: Those paths can be split into control paths and data paths (the latter relating to the set of 
+__1__: Those paths can be split into control paths and data paths (the latter relating to the set of 
 values the extended state can take
 
 Miscellaneous model coverage criteria <sup>2</sup> are commonly used when designing a test suite with the 
