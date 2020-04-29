@@ -232,4 +232,4 @@ We use the stream-oriented `cyclejs` framework to showcase our [state machine li
 We then wire that stream of actions with cyclejs sinks. In this iteration, we make use of two 
  drivers : the DOM driver for updating the screen, and a domain driver for fetching data. 
  
-Code available in [dedicated branch](https://github.com/brucou/cycle-state-machine-demo/tree/first-iteration).
+Code available in [dedicated branch](https://github.com/anishLearnsToCode/interface-design-automata).
