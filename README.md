@@ -1,4 +1,19 @@
 # Motivation
+
+There are many user facing frameworks out there in the world that each have their strengths and weaknesses and bring something to the table to ease client facing design and development and also increase the rate at which developers can prototype.
+
+Some examples of these client facing frameworks are Angular, React, Vue.js, Handlebars etc. After using a few of these frameworks I have found that developing a flow as to where the user will be navigated to and based on the information present takes time implementing in any of the given above frameworks as these complex flow charts are eventually created using a multitude of switch and if blocks that make the code convoluted and harder to comprehend.
+
+In this report using a combination of the open source cycle-js framework, the open source state-transducer library a new method of defining user experience and user flow is introduced in this project.
+
+The new method uses simple json (Javascript Object Notation) objects to define the user states and the user flow given input/action and then this flow is implemented automatically on the browser without defining explicit routes.
+
+Further, a mechanism to test the user flow that the developer has created is also provided within this project and this project lays down the foundation of the new proposed mechanism complete with end-to-end tests, automatic routing, integration tests and also unit tests.
+
+This proposed mechanism and hypothetically ease development and also greatly improve the speed of development and prototyping.
+
+
+# Introduction
 This demo aims at showing how state machines can be used to modelize reactive systems, in 
 particular user interfaces. They have long been used for embedded systems, in particular for 
 safety-critical software.
@@ -12,7 +27,7 @@ That multi-step workflow will be implemented in two iterations :
  
 - In the first iteration, we will do optimistic saves, i.e. we will not wait or check 
 for a confirmation message and directly move to the next step. We will also fetch data remotely 
-and assume that fetch will always be successful (call that optimistic fetch). This will helps us 
+and assume that fetch will always be successful (call that optimistic fetch). This will help us 
 showcase the definition and behaviour of an extended state machine.
 - In the second iteration, we will implement retries with exponential back-off for the initial 
 data-fetching. We will also implement pessimistic save for the most 'expensive' step in the 
