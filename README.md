@@ -36,8 +36,7 @@ later from where it stopped
 - user-generated data must be validated
 - after entering all necessary data for his application, the user can review them and decide to 
 modify some of them, by returning to the appropriate screen (cf. pencil icons in the wireframe)
-
-# First iteration
+    
 ## Modelizing the user flow with an extended state machine
 On the first iteration, the provided wireframes are refined into a workable state machine, which 
 reproduces the provided user flow, while addressing key implementation details (error flows, data
@@ -85,18 +84,17 @@ involves only a finite subset of the test space. How to pick that subset in a wa
 **confidence** level is the crux of the matter and conditions the testing strategy to adopt.
 
 Because our model is both specification and implementation target, testing our model 
-involves **testing the different paths in the model**[^1]. Creating the abstract test suite  is 
+involves **testing the different paths in the model**<sup>1</sup>. Creating the abstract test suite  is 
 an easily automatable process of simply traversing through the states and transitions in the 
 model, until the wanted model coverage is met. The abstract test suite can be 
 reified into executable concrete test suites, and actual outputs (from the model implementation) 
 are compared manually to expected outputs (derived from the informal requirements which originated 
 the model).
 
-[^1]: Those paths can be split into control paths and data paths (the latter relating to the set of 
-values the extended state can take, and addressed by [**data coverage** criteria](http://www.cse.chalmers.se/edu/year/2012/course/DIT848/files/06-Selecting-Tests.pdf)). We will 
-address only the control paths. 
+<sup>1</sup>: Those paths can be split into control paths and data paths (the latter relating to the set of 
+values the extended state can take
 
-Miscellaneous model coverage criteria[^2] are commonly used when designing a test suite with the 
+Miscellaneous model coverage criteria <sup>2</sup> are commonly used when designing a test suite with the 
 help of a model:
 
 - **All states coverage** is achieved when the test reaches every state in the model
