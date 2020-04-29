@@ -23,10 +23,10 @@ trade-off associated to using state machines for specifying and implementing use
 
 The implementation uses `cyclejs` as framework, and [`state-transducer`](https://github.com/brucou/state-transducer#example-run) as a state machine library.
 
-#Running it Locally
+# Running it Locally
 
- 1. Check out the branch on your machine using command line or terminal and navigate into
- the correct directory using
+Check out the branch on your machine using command line or terminal and navigate into
+the correct directory using
  ```shell script
 git clone https://github.com/anishLearnsToCode/interface-design-automata.git
 cd interface-design-automata
